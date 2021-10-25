@@ -16,8 +16,8 @@ public class ApiConfig {
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setReadTimeout(5000);//单位为ms
-        factory.setConnectTimeout(5000);//单位为ms
+        factory.setReadTimeout(5000);//ms
+        factory.setConnectTimeout(5000);//ms
         return factory;
     }
 }
