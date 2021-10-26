@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 public class KlineService {
     @Autowired
@@ -21,6 +23,12 @@ public class KlineService {
         return new KLine(klineReqDto, klineResponseDto);
     }
 
+    public KLine fetchKLineFromBeginAndEndAndInterval(String baseAsset, String quoteAsset,
+                                                      Instant beginTime, Instant endTime, String interval) {
+        Instant diff = endTime.minusMillis(beginTime.toEpochMilli());
+
+        KlineReqDto dto = new KlineReqDto(baseAsset, quoteAsset, interval, )
+    }
     public KLine saveKLine(KLine kLine) {
         return kLineRepository.save(kLine);
     }
