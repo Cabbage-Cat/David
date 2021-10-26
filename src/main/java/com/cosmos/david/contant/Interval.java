@@ -1,4 +1,4 @@
-package com.cosmos.david.enums;
+package com.cosmos.david.contant;
 
 import java.util.List;
 

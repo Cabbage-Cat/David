@@ -17,13 +17,5 @@ public class KlineServiceTest {
     @Autowired
     private KlineService klineService;
 
-    @Test
-    void test() throws JsonProcessingException {
-        KlineReqDto klineReqDto = new KlineReqDto("BTC", "USDT", "1d",
-                Instant.ofEpochMilli(1635091200000L), Instant.ofEpochMilli(1635177600000L),
-                50);
 
-        KLine kLine = klineService.fetchKLineFromKLineReq(klineReqDto);
-        System.out.println(kLine);
-    }
 }

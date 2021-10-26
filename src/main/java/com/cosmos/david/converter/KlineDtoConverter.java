@@ -6,27 +6,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class KlineDtoConverter {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public static KlineRespDto cvtToRespDtoFromData(String respData) throws JsonProcessingException {
-        respData = respData.substring(1, respData.length() - 1);
-        Object[] data = mapper.readValue(respData, Object[].class);
+    public static List<KlineRespDto> cvtToRespDtoListFromData(String dataList) throws JsonProcessingException {
+        Object[] dtos = mapper.readValue(dataList, Object[].class);
+        return Arrays.stream(dtos).map(dto -> {
+            List data = (List) dto;
+            return cvtFromRawObjectArray(data);
+        }).collect(Collectors.toList());
+    }
+
+    private static KlineRespDto cvtFromRawObjectArray(List lst) {
+        Object[] data = lst.toArray();
         KlineRespDto klineRespDto = new KlineRespDto();
-        klineRespDto.setStartTime(Instant.ofEpochMilli((Long) data[0]));
-        klineRespDto.setStartPrice(Double.parseDouble((String) data[1]));
-        klineRespDto.setMaxPrice(Double.parseDouble((String) data[2]));
-        klineRespDto.setMinPrice(Double.parseDouble((String) data[3]));
-        klineRespDto.setEndPrice(Double.parseDouble((String) data[4]));
-        klineRespDto.setTradeVolume(Double.parseDouble((String) data[5]));
-        klineRespDto.setEndTime(Instant.ofEpochMilli((Long) data[6]));
-        klineRespDto.setTradeMoney(Double.parseDouble((String) data[7]));
-        klineRespDto.setTradeCount(Long.parseLong(data[8].toString()));
-        klineRespDto.setBuyCount(Double.parseDouble((String) data[9]));
-        klineRespDto.setBuyMoney(Double.parseDouble((String) data[10]));
+        klineRespDto.setStartTime(Instant.ofEpochMilli((Long) lst.get(0)));
+        klineRespDto.setStartPrice(Double.parseDouble((String) lst.get(1)));
+        klineRespDto.setMaxPrice(Double.parseDouble((String) lst.get(2)));
+        klineRespDto.setMinPrice(Double.parseDouble((String) lst.get(3)));
+        klineRespDto.setEndPrice(Double.parseDouble((String) lst.get(4)));
+        klineRespDto.setTradeVolume(Double.parseDouble((String) lst.get(5)));
+        klineRespDto.setEndTime(Instant.ofEpochMilli((Long) lst.get(6)));
+        klineRespDto.setTradeMoney(Double.parseDouble((String) lst.get(7)));
+        klineRespDto.setTradeCount(Long.parseLong(lst.get(8).toString()));
+        klineRespDto.setBuyCount(Double.parseDouble((String) lst.get(9)));
+        klineRespDto.setBuyMoney(Double.parseDouble((String) lst.get(10)));
         return klineRespDto;
     }
 
