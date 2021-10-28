@@ -18,11 +18,11 @@ import static com.cosmos.david.contant.BasicConstant.*;
 @Component
 public class WeightLimitAspect {
     private final static RateLimiter API_IP_LIMITER =
-            RateLimiter.create(Double.valueOf(API_WEIGHT_LIMIT_PER_MIN_BY_IP * 0.8) / 60);
+            RateLimiter.create(Double.valueOf(API_WEIGHT_LIMIT_PER_MIN_BY_IP) / 60);
     private final static RateLimiter SAPI_IP_LIMITER =
-            RateLimiter.create(Double.valueOf(SAPI_WEIGHT_LIMIT_PER_MIN_BY_IP * 0.8) / 60);
+            RateLimiter.create(Double.valueOf(SAPI_WEIGHT_LIMIT_PER_MIN_BY_IP) / 60);
     private final static RateLimiter SAPI_UID_LIMITER =
-            RateLimiter.create(Double.valueOf(SAPI_WEIGHT_LIMIT_PER_MIN_BY_UID * 0.8) / 60);
+            RateLimiter.create(Double.valueOf(SAPI_WEIGHT_LIMIT_PER_MIN_BY_UID) / 60);
     private final static long DEFAULT_TIMEOUT = 3L;
 
     @Pointcut("@annotation(com.cosmos.david.aspect.WeightLimit)")
@@ -33,7 +33,6 @@ public class WeightLimitAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Signature signature = pjp.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
-        //获取目标方法
         Method targetMethod = methodSignature.getMethod();
         if (targetMethod.isAnnotationPresent(WeightLimit.class)) {
             WeightLimit rate = targetMethod.getAnnotation(WeightLimit.class);

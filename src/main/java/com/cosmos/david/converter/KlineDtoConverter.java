@@ -1,6 +1,9 @@
 package com.cosmos.david.converter;
 
+import com.cosmos.david.dto.KlineReqDto;
 import com.cosmos.david.dto.KlineRespDto;
+import com.cosmos.david.model.KLine;
+import com.cosmos.david.model.KLineId;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -38,6 +41,23 @@ public class KlineDtoConverter {
         klineRespDto.setBuyCount(Double.parseDouble((String) lst.get(9)));
         klineRespDto.setBuyMoney(Double.parseDouble((String) lst.get(10)));
         return klineRespDto;
+    }
+
+    public static KLine cvtFromReqAndResp(final KlineReqDto req, final KlineRespDto resp) {
+
+        KLineId kLineId = new KLineId(req.getBaseAsset(), req.getQuoteAsset(), req.getInterval(), resp.getStartTime());
+        Instant endTime = resp.getEndTime();
+        double startPrice = resp.getStartPrice();
+        double endPrice = resp.getEndPrice();
+        double maxPrice = resp.getMaxPrice();
+        double minPrice = resp.getMinPrice();
+        double tradeVolume = resp.getTradeVolume();
+        double tradeMoney = resp.getTradeMoney();
+        long tradeCount = resp.getTradeCount();
+        double buyCount = resp.getBuyCount();
+        double buyMoney = resp.getBuyMoney();
+
+        return new KLine(kLineId, endTime, startPrice, endPrice, maxPrice, minPrice, tradeVolume, tradeMoney, tradeCount, buyCount, buyMoney);
     }
 
 }
