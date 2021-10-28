@@ -14,10 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class KlineReqDto {
     @NotNull
-    private String baseAsset = "BTC";
-
-    @NotNull
-    private String quoteAsset = "USDT";
+    private String symbol = "BTCUSDT";
 
     @NotNull
     private String interval = "1d";

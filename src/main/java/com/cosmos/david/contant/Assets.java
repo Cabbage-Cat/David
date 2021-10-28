@@ -1,15 +1,29 @@
 package com.cosmos.david.contant;
 
+import com.cosmos.david.model.Symbol;
+import com.cosmos.david.repository.SymbolRepository;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class Assets {
-    public static final Set<String> BASE_ASSETS = new HashSet<>(
-            List.of("WRX", "XLMUP", "GXS", "NBS", "PROS", "DCR", "USDP", "ILV", "BAT", "EUR", "KEEP", "SXP", "WABI", "TUSD", "SWRV", "CLOAK", "REN", "SXPUP", "XTZ", "SPARTA", "SYS", "XRPBULL", "OMG", "BCHSV", "XTZDOWN", "TRB", "NAS", "WNXM", "STMX", "AUCTION", "EDO", "BTCUP", "FUEL", "DODO", "BAR", "OST", "MITH", "CKB", "SCRT", "TVK", "SC", "REP", "XTZUP", "WING", "LEND", "POLY", "SKY", "NEAR", "RDN", "BAND", "DF", "CDT", "BNBBULL", "GHST", "CFX", "1INCH", "CTXC", "FILDOWN", "BADGER", "GTO", "SFP", "REQ", "XLM", "IQ", "DOCK", "EASY", "QSP", "SXPDOWN", "OCEAN", "ALPHA", "MLN", "BETA", "KAVA", "SUN", "HEGIC", "GVT", "RCN", "NAV", "MBOX", "COTI", "DAI", "PIVX", "POLS", "CHZ", "AUTO", "ADX", "UNIUP", "MINA", "BTCDOWN", "QLC", "BTT", "FTT", "GO", "ANKR", "WAXP", "DEGO", "CND", "ALPACA", "BTS", "AST", "TORN", "LOOM", "WBTC", "LTC", "LTCUP", "1INCHUP", "XMR", "ALGO", "WTC", "MDA", "QKC", "EOSBEAR", "FIRO", "YOYO", "LINA", "XEC", "BCHUP", "EOSBULL", "BAL", "LINKUP", "AE", "CELR", "WIN", "GBP", "ERD", "ETH", "ASR", "C98", "ADADOWN", "RLC", "ARDR", "SALT", "NCASH", "PHA", "ZRX", "WINGS", "FILUP", "NKN", "SRM", "NMR", "TWT", "RSR", "TRXUP", "OAX", "TNB", "CHAT", "PHB", "UTK", "STRAX", "BCN", "TOMO", "YFIDOWN", "KLAY", "ICN", "XVG", "MKR", "KP3R", "AGLD", "CVP", "ARN", "GALA", "YFIUP", "YGG", "LRC", "LINKDOWN", "BNB", "UNFI", "PPT", "DOTDOWN", "CTK", "POND", "HSR", "GRS", "ONT", "ICP", "AMB", "PAX", "GRT", "LUNA", "VEN", "IRIS", "CHR", "GAS", "CELO", "ETC", "SUSHIDOWN", "LIT", "AGIX", "BZRX", "ALICE", "MASK", "ARK", "MANA", "FOR", "STRAT", "UMA", "ACM", "ZEC", "ETHBEAR", "UFT", "COCOS", "RAMP", "BEAR", "COMP", "HIVE", "BNBUP", "MIR", "SOL", "SUSD", "IDEX", "FLM", "MTH", "YFI", "BNBDOWN", "AAVE", "USDS", "PNT", "ZIL", "HBAR", "SNGLS", "POWR", "ATM", "OG", "DENT", "GNO", "LUN", "KSM", "VIDT", "BCH", "QTUM", "THETA", "BEL", "KNC", "DLT", "SSV", "BLZ", "STX", "DASH", "BUSD", "TFUEL", "TCT", "BCPT", "MATIC", "INJ", "AERGO", "ARPA", "PERP", "LSK", "AAVEDOWN", "CLV", "PAXG", "BRD", "RIF", "DEXE", "SNM", "AXS", "IOST", "FARM", "JUV", "GLM", "BCHDOWN", "BCHA", "STORJ", "CTSI", "QNT", "XEM", "TRXDOWN", "DOGE", "BTG", "XRPUP", "AVAX", "VET", "VGX", "MTL", "DUSK", "LTO", "KMD", "ETHUP", "UNIDOWN", "SHIB", "TRIG", "STEEM", "UNI", "IOTX", "RARE", "JST", "FIL", "BCD", "RAY", "EOS", "DNT", "ICX", "OGN", "TRU", "GNT", "NXS", "BCC", "APPC", "MOD", "CMT", "RPX", "OM", "LTCDOWN", "HOT", "BEAM", "XRPBEAR", "EZ", "LAZIO", "DGD", "PERL", "AR", "FIDA", "EPS", "DOT", "XVS", "MFT", "BTC", "MBL", "NEO", "LINK", "EOSUP", "SKL", "NPXS", "FIO", "DOTUP", "BTCB", "KEY", "MCO", "CVC", "TRX", "BNBBEAR", "HNT", "YFII", "DGB", "BIFI", "FORTH", "REEF", "NULS", "STPT", "WAN", "TLM", "SLP", "QUICK", "SNT", "GTC", "ADAUP", "VIA", "EGLD", "BOND", "SUSHI", "ETHDOWN", "CHESS", "OXT", "BURGER", "SUB", "PSG", "VIBE", "ZEN", "CREAM", "VIB", "HC", "INS", "DATA", "AGI", "BTCST", "BNT", "ETHBULL", "BAKE", "COS", "BULL", "MDT", "PUNDIX", "AUD", "DREP", "WAVES", "FIS", "ELF", "ENJ", "NANO", "COVER", "RENBTC", "XRP", "POA", "ATA", "TNT", "NEBL", "AAVEUP", "PROM", "FRONT", "BKRW", "ADA", "VTHO", "ROSE", "USDSB", "SNX", "AUDIO", "BOT", "BQX", "AKRO", "SAND", "XLMDOWN", "TKO", "FET", "TROY", "SUSHIUP", "DIA", "USDC", "DYDX", "ANT", "EVX", "AION", "IOTA", "CRV", "FXS", "XRPDOWN", "HARD", "ENG", "ONE", "VITE", "EOSDOWN", "SUPER", "MDX", "FUN", "BCHABC", "1INCHDOWN", "NU", "WPR", "ATOM", "FLOW", "POE", "CAKE", "ERN", "ORN", "PHX", "STORM", "FTM", "AVA", "TRIBE", "RAD", "XZC", "BETH", "RUNE", "LPT", "ONG", "RVN")
-    );
+@Component
+public class Assets implements InitializingBean {
 
-    public static final Set<String> QUOTE_ASSETS = new HashSet<>(List.of("BTC", "ETH", "USDT", "BNB", "TRX", "BUSD"));
+    @Autowired
+    private SymbolRepository symbolRepository;
 
+    private Set<String> symbols;
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        symbols = symbolRepository.findAll().stream()
+                .map(Symbol::getSymbol)
+                .collect(Collectors.toSet());
+    }
 }

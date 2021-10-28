@@ -15,8 +15,7 @@ import java.time.Instant;
 @Embeddable
 @EqualsAndHashCode
 public class KLineId implements Serializable {
-    private String baseAsset;
-    private String quoteAsset;
+    private String symbol;
     private String interval;
     private Instant startTime;
 }

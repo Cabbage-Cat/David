@@ -16,7 +16,6 @@ import java.io.Serializable;
 @MappedSuperclass
 @EqualsAndHashCode
 public class KLineType implements Serializable {
-    private String baseAsset;
-    private String quoteAsset;
+    private String symbol;
     private String interval;
 }

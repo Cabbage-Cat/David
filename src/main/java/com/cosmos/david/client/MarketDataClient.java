@@ -27,7 +27,7 @@ public class MarketDataClient {
     @WeightLimit
     public List<KlineRespDto> getKlineResponseDto(@Valid KlineReqDto klineReqDto) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(BASE_URL + KLINES_URL)
-                .queryParam("symbol", klineReqDto.getBaseAsset() + klineReqDto.getQuoteAsset())
+                .queryParam("symbol", klineReqDto.getSymbol())
                 .queryParam("interval", klineReqDto.getInterval())
                 .queryParam("startTime", klineReqDto.getStartTime().toEpochMilli())
                 .queryParam("endTime", klineReqDto.getEndTime().toEpochMilli())

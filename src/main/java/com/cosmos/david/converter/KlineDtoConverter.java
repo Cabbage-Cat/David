@@ -45,7 +45,7 @@ public class KlineDtoConverter {
 
     public static KLine cvtFromReqAndResp(final KlineReqDto req, final KlineRespDto resp) {
 
-        KLineId kLineId = new KLineId(req.getBaseAsset(), req.getQuoteAsset(), req.getInterval(), resp.getStartTime());
+        KLineId kLineId = new KLineId(req.getSymbol(), req.getInterval(), resp.getStartTime());
         Instant endTime = resp.getEndTime();
         double startPrice = resp.getStartPrice();
         double endPrice = resp.getEndPrice();
