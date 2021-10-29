@@ -3,6 +3,7 @@ package com.cosmos.david.contant;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,9 @@ public class BasicConstant implements InitializingBean {
     public static final int WEIGHT_LIMIT_TYPE_BY_API_IP = 1;
     public static final int WEIGHT_LIMIT_TYPE_BY_SAPI_IP = 2;
     public static final int WEIGHT_LIMIT_TYPE_BY_SAPI_UID = 3;
+
+    // Default fetch 1 year KLines
+    public static final Duration DEFAULT_DURATION = Duration.ofDays(365);
 
     // X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)
     public static final int API_WEIGHT_LIMIT_PER_MIN_BY_IP = 1200;

@@ -31,8 +31,7 @@ public class KlineServiceTest {
                 .toInstant();
         Instant end = ZonedDateTime.of(2021, 3, 1, 0, 0,0,0,ZoneOffset.UTC)
                 .toInstant();
-        klineService.fetchKLineFromBeginToEndWithInterval("BTC", "USDT",
-                begin, end, "1d");
+
     }
 
     void test2() {
