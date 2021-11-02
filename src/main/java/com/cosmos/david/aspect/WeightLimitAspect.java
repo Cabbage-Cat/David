@@ -18,7 +18,7 @@ import static com.cosmos.david.contant.BasicConstant.*;
 @Component
 public class WeightLimitAspect {
     private final static RateLimiter API_IP_LIMITER =
-            RateLimiter.create(Double.valueOf(API_WEIGHT_LIMIT_PER_MIN_BY_IP) / 60);
+            RateLimiter.create(Double.valueOf(API_WEIGHT_LIMIT_PER_MIN_BY_IP * 0.68) / 60);
     private final static RateLimiter SAPI_IP_LIMITER =
             RateLimiter.create(Double.valueOf(SAPI_WEIGHT_LIMIT_PER_MIN_BY_IP) / 60);
     private final static RateLimiter SAPI_UID_LIMITER =

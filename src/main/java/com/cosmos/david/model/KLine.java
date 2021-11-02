@@ -32,4 +32,6 @@ public class KLine {
     private double buyCount;
     private double buyMoney;
 
+
+
 }

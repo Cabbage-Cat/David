@@ -23,12 +23,14 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.cosmos.david.contant.BasicConstant.FETCH_KLINE_MAX_LIMIT_PER_REQ;
+import static com.cosmos.david.contant.BasicConstant.INTERVAL_TO_MS;
 
 @Service
 public class KlineService implements InitializingBean {
@@ -45,12 +47,15 @@ public class KlineService implements InitializingBean {
     private Set<String> symbols;
 
 
-
+    @Async
     public void fetchKLineFromBeginToEndWithInterval(String symbol,
                                                       Instant beginTime, Instant endTime, String interval) {
+
         if (beginTime.isAfter(endTime) || !symbols.contains(symbol)
             || !Interval.INTERVALS.contains(interval)) { return; }
 
+
+        // System.out.println("Fetch " + symbol + " with interval " + interval + " on time:" + beginTime);
         long diffMs = Duration.between(beginTime, endTime).toMillis();
         long baseMs = BasicConstant.INTERVAL_TO_MS.get(interval) * FETCH_KLINE_MAX_LIMIT_PER_REQ;
         long times = diffMs / baseMs; times++;
@@ -72,25 +77,49 @@ public class KlineService implements InitializingBean {
         return kLineRepository.saveAll(kLines);
     }
 
-    @Async
+
     @WeightLimit
     public void fetchFromReqThenSave(final KlineReqDto reqDto) {
+
         KLineType kLineType = new KLineType(reqDto.getSymbol(), reqDto.getInterval());
-        Optional<KLineFetchTime> lastFetchTime = kLineFetchTimeRepository.findById(kLineType);
-        if (lastFetchTime.isEmpty() || lastFetchTime.get().getLastFetchTime().isAfter(reqDto.getEndTime())) { return; }
         List<KlineRespDto> klineResponseDto = marketDataClient.getKlineResponseDto(reqDto);
+        Instant endTime1 = Instant.now();
+        if (!klineResponseDto.isEmpty() &&
+                klineResponseDto.get(klineResponseDto.size() - 1).getEndTime().compareTo(endTime1) < 0) {
+            endTime1 = klineResponseDto.get(klineResponseDto.size() - 1).getEndTime();
+        }
+
         List<KLine> collect = klineResponseDto.stream()
                 .map(respDto -> KlineDtoConverter.cvtFromReqAndResp(reqDto, respDto))
                 .collect(Collectors.toList());
         if (collect.isEmpty()) { return; }
         saveKLines(collect);
-        Instant saveInstant = reqDto.getEndTime().compareTo(Instant.now()) < 0 ? reqDto.getEndTime() : Instant.now();
-        kLineFetchTimeRepository.save(new KLineFetchTime(kLineType, saveInstant));
+        Instant endTime2 = reqDto.getEndTime();
+        Instant saveInstant = endTime2;
+        if (endTime1.isBefore(endTime2)) { saveInstant = endTime1; }
+
+        System.out.println("Save " + kLineType + " " + saveInstant);
+        kLineFetchTimeRepository.saveAndFlush(new KLineFetchTime(kLineType, saveInstant));
     }
 
 
     private void fetchAllCoinKLinesWithTimeAndInterval(Instant beginTime, Instant endTime, String interval) {
-        symbols.forEach(symbol -> fetchKLineFromBeginToEndWithInterval(symbol, beginTime, endTime, interval));
+        try {
+            for (String symbol : symbols) {
+                Optional<KLineFetchTime> fetchTime = kLineFetchTimeRepository.findById(new KLineType(symbol, interval));
+                Instant beginCpy = Instant.ofEpochMilli(beginTime.toEpochMilli());
+                if (fetchTime.isPresent() && fetchTime.get().getLastFetchTime().compareTo(beginCpy) >= 0) {
+                    beginCpy = fetchTime.get().getLastFetchTime();
+                }
+
+                if (beginCpy.plusMillis(INTERVAL_TO_MS.get(interval)).isAfter(endTime)) { continue; }
+
+                fetchKLineFromBeginToEndWithInterval(symbol, beginCpy, endTime, interval);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void fetchAllCoinKLinesTillNowWithDurationAndInterval(Duration duration, String interval) {
@@ -107,7 +136,6 @@ public class KlineService implements InitializingBean {
             taskScheduler.scheduleAtFixedRate(task, BasicConstant.INTERVAL_TO_MS.get(interval));
         }
     }
-
 
 
     @Override

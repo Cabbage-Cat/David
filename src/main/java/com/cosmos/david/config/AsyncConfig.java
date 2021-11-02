@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
@@ -11,12 +12,12 @@ import java.util.concurrent.Executor;
 
 @Configuration
 @EnableAsync
-
+@EnableScheduling
 public class AsyncConfig {
 
     private int corePoolSize = 10;
-    private int maxPoolSize = 200;
-    private int queueCapacity = 10;
+    private int maxPoolSize = 20;
+    private int queueCapacity = 20;
 
     @Bean
     public Executor taskExecutor() {
