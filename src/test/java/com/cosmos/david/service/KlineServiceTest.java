@@ -3,6 +3,8 @@ package com.cosmos.david.service;
 
 import com.cosmos.david.client.SymbolDataClient;
 import com.cosmos.david.converter.Convert24HrPriceJSONToSymbol;
+import com.cosmos.david.model.KLine;
+import com.cosmos.david.model.KLineType;
 import com.cosmos.david.model.Symbol;
 import com.cosmos.david.repository.KLineFetchTimeRepository;
 import com.cosmos.david.repository.KLineRepository;
@@ -64,7 +66,6 @@ public class KlineServiceTest {
     }
     @Test
     void test2() {
-        kLineRepository.deleteAll();
-        kLineFetchTimeRepository.deleteAll();
+
     }
 }

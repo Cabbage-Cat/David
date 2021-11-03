@@ -32,6 +32,8 @@ public class BasicConstant implements InitializingBean {
 
     public static Map<String, Long> INTERVAL_TO_MS = new HashMap<>();
 
+    public static final double BOLL_RETEST_BIAS_PERCENT = 0.01;
+
     public static int FETCH_KLINE_MAX_LIMIT_PER_REQ = 1000;
     @Override
     public void afterPropertiesSet() throws Exception {

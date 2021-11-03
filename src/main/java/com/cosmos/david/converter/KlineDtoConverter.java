@@ -57,7 +57,8 @@ public class KlineDtoConverter {
         double buyCount = resp.getBuyCount();
         double buyMoney = resp.getBuyMoney();
 
-        return new KLine(kLineId, endTime, startPrice, endPrice, maxPrice, minPrice, tradeVolume, tradeMoney, tradeCount, buyCount, buyMoney);
+        return new KLine(kLineId, endTime, startPrice, endPrice, maxPrice, minPrice, tradeVolume, tradeMoney,
+                tradeCount, buyCount, buyMoney, endPrice, endPrice, endPrice, endPrice, endPrice);
     }
 
 }
